@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DNA Sequence Compression - Huffman Coding | BioAI</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="cyber-grid"></div>
+    <div class="floating-particles"></div>
+    <div class="dna-helix-bg"></div>
+
+    <!-- Navigation Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <span class="logo-icon">🧬</span>
+                <h1>DNA <span class="highlight">HUFFMAN</span> COMPRESSION</h1>
+            </div>
+            <div class="header-info">
+                <p>AI-Powered Bioinformatics Compression System</p>
+            </div>
+        </div>
+        <div class="status-indicator">
+            <span class="pulse"></span>
+            <span>System Active</span>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="container">
+        <!-- Left Panel: DNA Input Section -->
+        <section class="panel input-panel">
+            <div class="panel-header">
+                <h2>🧬 DNA SEQUENCE INPUT</h2>
+                <div class="panel-divider"></div>
+            </div>
+            
+            <div class="section-content">
+                <textarea 
+                    id="dnaInput" 
+                    class="dna-input" 
+                    placeholder="Enter DNA sequence (A, T, C, G)&#10;Example: ATCGATCGATCGATCGATCGATCGATCG"
+                    spellcheck="false"></textarea>
+                
+                <div class="input-controls">
+                    <button id="processBtn" class="btn btn-primary">
+                        <span class="btn-icon">⚡</span>
+                        PROCESS SEQUENCE
+                    </button>
+                    <button id="randomBtn" class="btn btn-secondary">
+                        <span class="btn-icon">🎲</span>
+                        GENERATE RANDOM
+                    </button>
+                    <button id="sampleBtn" class="btn btn-secondary">
+                        <span class="btn-icon">📋</span>
+                        LOAD SAMPLE
+                    </button>
+                    <button id="clearBtn" class="btn btn-danger">
+                        <span class="btn-icon">✕</span>
+                        CLEAR
+                    </button>
+                </div>
+
+                <div class="input-info">
+                    <div class="info-stat">
+                        <span class="label">Sequence Length:</span>
+                        <span id="seqLength" class="value">0</span>
+                    </div>
+                    <div class="info-stat">
+                        <span class="label">Valid Characters:</span>
+                        <span id="validCheck" class="value valid">✓</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Central Panel: Analysis & Visualization -->
+        <section class="panel analysis-panel">
+            <!-- Frequency Analysis -->
+            <div class="sub-panel">
+                <div class="sub-panel-header">
+                    <h3>📊 FREQUENCY ANALYSIS</h3>
+                </div>
+                <div class="frequency-grid">
+                    <div class="freq-card">
+                        <div class="freq-label">A</div>
+                        <div class="freq-count" id="freqA">0</div>
+                        <div class="freq-bar">
+                            <div class="freq-bar-fill" id="freqBarA"></div>
+                        </div>
+                        <div class="freq-percentage" id="freqPercA">0%</div>
+                    </div>
+                    <div class="freq-card">
+                        <div class="freq-label">T</div>
+                        <div class="freq-count" id="freqT">0</div>
+                        <div class="freq-bar">
+                            <div class="freq-bar-fill" id="freqBarT"></div>
+                        </div>
+                        <div class="freq-percentage" id="freqPercT">0%</div>
+                    </div>
+                    <div class="freq-card">
+                        <div class="freq-label">C</div>
+                        <div class="freq-count" id="freqC">0</div>
+                        <div class="freq-bar">
+                            <div class="freq-bar-fill" id="freqBarC"></div>
+                        </div>
+                        <div class="freq-percentage" id="freqPercC">0%</div>
+                    </div>
+                    <div class="freq-card">
+                        <div class="freq-label">G</div>
+                        <div class="freq-count" id="freqG">0</div>
+                        <div class="freq-bar">
+                            <div class="freq-bar-fill" id="freqBarG"></div>
+                        </div>
+                        <div class="freq-percentage" id="freqPercG">0%</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Huffman Tree Visualization -->
+            <div class="sub-panel">
+                <div class="sub-panel-header">
+                    <h3>🌳 HUFFMAN TREE</h3>
+                </div>
+                <div class="huffman-tree-container" id="huffmanTreeContainer">
+                    <div class="tree-placeholder">
+                        <p>Huffman tree will appear here</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Huffman Encoding Table -->
+            <div class="sub-panel">
+                <div class="sub-panel-header">
+                    <h3>🔐 HUFFMAN CODES</h3>
+                </div>
+                <div class="encoding-table">
+                    <table id="huffmanTable">
+                        <thead>
+                            <tr>
+                                <th>Base</th>
+                                <th>Freq</th>
+                                <th>Code</th>
+                                <th>Bits</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            <tr>
+                                <td colspan="4" class="empty-state">No data</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Right Panel: Compression & Output -->
+        <section class="panel output-panel">
+            <!-- Compression Statistics -->
+            <div class="sub-panel">
+                <div class="sub-panel-header">
+                    <h3>📈 COMPRESSION STATISTICS</h3>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">📊</div>
+                        <div class="stat-label">Original Bits</div>
+                        <div class="stat-value" id="originalBits">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🗜️</div>
+                        <div class="stat-label">Compressed Bits</div>
+                        <div class="stat-value" id="compressedBits">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">⚙️</div>
+                        <div class="stat-label">Compression Ratio</div>
+                        <div class="stat-value" id="compressionRatio">0%</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">💾</div>
+                        <div class="stat-label">Bits Saved</div>
+                        <div class="stat-value" id="bitsSaved">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">⚡</div>
+                        <div class="stat-label">Efficiency</div>
+                        <div class="stat-value" id="efficiency">0%</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🎯</div>
+                        <div class="stat-label">Avg Code Length</div>
+                        <div class="stat-value" id="avgCodeLength">0.00</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Binary Conversion -->
+            <div class="sub-panel">
+                <div class="sub-panel-header">
+                    <h3>💻 BINARY CONVERSION</h3>
+                </div>
+                <div class="binary-section">
+                    <div class="binary-label">Standard Binary (2-bit)</div>
+                    <div class="binary-output" id="standardBinary">
+                        <p class="placeholder">No data</p>
+                    </div>
+                    <button id="copyStandardBtn" class="btn btn-copy">Copy Binary</button>
+                </div>
+            </div>
+
+            <!-- Huffman Encoded Output -->
+            <div class="sub-panel">
+                <div class="sub-panel-header">
+                    <h3>🔒 HUFFMAN COMPRESSED</h3>
+                </div>
+                <div class="binary-section">
+                    <div class="binary-label">Huffman Encoded Binary</div>
+                    <div class="binary-output" id="huffmanBinary">
+                        <p class="placeholder">No data</p>
+                    </div>
+                    <button id="copyHuffmanBtn" class="btn btn-copy">Copy Compressed</button>
+                </div>
+            </div>
+
+            <!-- Decompressed Output -->
+            <div class="sub-panel">
+                <div class="sub-panel-header">
+                    <h3>🔓 DECOMPRESSED SEQUENCE</h3>
+                </div>
+                <div class="binary-section">
+                    <div class="decompressed-output" id="decompressedOutput">
+                        <p class="placeholder">No data</p>
+                    </div>
+                    <button id="copyDecompressedBtn" class="btn btn-copy">Copy Sequence</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>🧬 DNA Huffman Compression System | Advanced Bioinformatics Analysis | Lossless Compression Technology</p>
+        <p>Developed with AI-Powered Efficiency</p>
+    </footer>
+
+    <!-- Loading Animation -->
+    <div class="loader" id="loader">
+        <div class="loader-spinner"></div>
+        <p>Processing DNA Sequence...</p>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="notification" class="notification"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
